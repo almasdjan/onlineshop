@@ -1,0 +1,80 @@
+create table users (
+	id serial primary key,        
+	name varchar(255) not null,       
+	email varchar(255) not null unique,         
+	phoneNumber varchar(255) not null unique,
+	password varchar(255) not null    
+);
+
+
+
+CREATE TABLE products
+(
+    id serial primary key,
+    name varchar(255) not null unique,
+    image varchar(255) not null unique,
+	price numeric not null,
+	height varchar(255),
+	size varchar(255),
+	instruction varchar(255),
+	description varchar(255) 
+);
+
+
+
+
+CREATE TABLE carts
+(
+    id serial primary key,
+    user_id int references users (id) on delete cascade not null,
+    product_id int references products (id) on delete cascade UNIQUE not null,
+	quantity int default 1
+);
+
+
+
+CREATE TABLE recommended_products
+(
+    id serial primary key,
+    product_id int references products (id) on delete cascade not null,
+    recommended_product int references products (id) on delete cascade not null
+);
+
+
+CREATE TABLE order_status
+(
+    id serial primary key,
+    status varchar(255) unique not null
+);
+
+insert into order_status (status)  values ('Заказан');
+insert into order_status (status)  values ('Обработан'); 
+insert into order_status (status)  values ('Отправлен');
+insert into order_status (status)  values ('Доставлен'); 
+
+
+
+CREATE TABLE orders
+(
+    id serial primary key,
+    user_id int references users (id) not null,
+    total_amount numeric not null,
+	status_id int references order_status (id) default 1,
+	created_date DATE DEFAULT CURRENT_DATE,
+	address varchar(255)
+);
+
+
+create table order_items(
+	id serial primary key,
+	order_id  int references orders (id) on delete cascade not null,
+    product_id int  references products (id) on delete cascade not null,
+	quantity numeric not null,
+	price numeric not null
+);
+
+
+
+--make the user admin
+--update users set is_admin = true where email ='string'
+
