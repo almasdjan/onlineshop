@@ -4,8 +4,8 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
+	"onlineshop/app/repository"
 	"onlineshop/models"
-	"onlineshop/pkg/repository"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

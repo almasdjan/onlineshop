@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"onlineshop/pkg/service"
+	"onlineshop/app/service"
 
 	"github.com/gin-gonic/gin"
 

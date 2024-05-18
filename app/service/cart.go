@@ -1,8 +1,8 @@
 package service
 
 import (
+	"onlineshop/app/repository"
 	"onlineshop/models"
-	"onlineshop/pkg/repository"
 )
 
 type CartService struct {

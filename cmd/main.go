@@ -2,15 +2,15 @@ package main
 
 import (
 	"context"
-	"onlineshop/pkg/handler"
-	"onlineshop/pkg/repository"
-	"onlineshop/pkg/service"
-	"onlineshop/servers"
+	"onlineshop"
+	"onlineshop/app/handler"
+	"onlineshop/app/repository"
+	"onlineshop/app/service"
+	"onlineshop/configs"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 
@@ -29,12 +29,8 @@ import (
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
-	if err := initConfig(); err != nil {
+	if err := configs.InitConfig(); err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
-	}
-
-	if err := godotenv.Load(); err != nil {
-		logrus.Fatalf("error loading env variables: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDB((repository.Config{
@@ -53,7 +49,7 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(servers.Server)
+	srv := new(onlineshop.Server)
 	go func() {
 		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
 			logrus.Fatalf("error occured while running http server: %s", err.Error())
@@ -75,12 +71,5 @@ func main() {
 	if err := db.Close(); err != nil {
 		logrus.Errorf("error occured on db connection close: %s", err.Error())
 	}
-
-}
-
-func initConfig() error {
-	viper.AddConfigPath("configs")
-	viper.SetConfigName("config")
-	return viper.ReadInConfig()
 
 }

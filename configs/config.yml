@@ -6,5 +6,5 @@ db:
     username: "postgres"
     dbname:   "onlineshop"
     sslmode:  "disable"
-    passwd:   ""
+    passwd:   "229847"
     
